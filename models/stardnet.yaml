@@ -1,0 +1,68 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# Parameters
+nc: 80            # overridden by --data (e.g., nc=3 for MVAAOD)
+depth_multiple: 1.0
+width_multiple: 1.0
+
+anchors:
+  - [3, 4, 4, 5, 8, 9]              # P2 / stride 4
+  - [10, 13, 16, 30, 33, 23]        # P3 / stride 8
+  - [30, 61, 62, 45, 59, 119]       # P4 / stride 16
+  - [116, 90, 156, 198, 373, 326]   # P5 / stride 32
+
+# =========================
+# BACKBONE (YOLOv5l variant)
+# =========================
+backbone:
+  - [-1, 1, Conv, [64, 6, 2, 2]]        # 0 P1/2
+  - [-1, 1, Conv, [128, 3, 2]]          # 1 P2/4
+  - [-1, 3, C3,   [128]]                # 2 P2 out
+  - [-1, 1, Conv, [256, 3, 2]]          # 3 P3/8
+  - [-1, 5, C3,   [256]]                # 4 P3 out  (slightly lighter than v5l)
+  - [-1, 1, Conv, [512, 3, 2]]          # 5 P4/16
+  - [-1, 6, C3,   [512]]                # 6 P4 out
+  - [-1, 1, Conv, [1024, 3, 2]]         # 7 P5/32
+  - [-1, 2, C3,   [1024]]               # 8
+  - [-1, 1, SPPF, [1024, 5]]            # 9 P5 out
+
+# =========================
+# HEAD / NECK
+# DRFB on P2 and P3
+# DCLS on P4 and P5
+# Thin P3→P2 fusion
+# CSPST heads
+# =========================
+head:
+  # DRFB on P2 and P3 (multi scenario receptive field)
+  - [2,  2, DRFB, [128, 1]]             # 10: P2 DRFB
+  - [4,  2, DRFB, [256, 1]]             # 11: P3 DRFB
+
+  # DCLS enhanced P4 and P5 (DRFB + ConvLSTM + STAB at inner width)
+  - [6,  1, DCLS, [512, 0.5]]           # 12: P4 DCLS (512 → 512, larger inner width)
+  - [9,  1, DCLS, [512, 0.25]]          # 13: P5 DCLS (1024 → 512, smaller inner width)
+
+  # Thin P3 → P2 fusion
+  - [11, 1, Conv,        [128, 1, 1]]          # 14: match P3 to 128
+  - [14, 1, nn.Upsample, [None, 2, 'nearest']] # 15: P3↑ to P2 size
+
+  # Fuse raw P2 + DRFB(P2) + P3↑
+  - [[2, 10, 15], 1, Concat, [1]]       # 16: concat (P2 raw, P2 DRFB, P3 up)
+  - [-1, 1, C3, [128]]                  # 17: compress 3×128 → 128
+  - [-1, 2, C3, [128]]                  # 18: P2 refined (light C3, n=2)
+
+  # Extra tiny Conv on P2 refined (already present in your 620-layer version)
+  - [18, 1, Conv, [128, 1, 1]]          # 19: P2 pre-head Conv
+
+  # Simple laterals for P3 and P4
+  - [11, 1, C3, [256]]                  # 20: P3 lat
+  - [12, 1, C3, [512]]                  # 21: P4 lat
+
+  # CSPST heads (CSP split + Swin on heavy lane, as in figure)
+  - [19, 1, CSPST, [128, 1, True,  1, 1]]      # 22: P2 head
+  - [20, 1, CSPST, [256, 1, True,  1, 1]]      # 23: P3 head
+  - [21, 1, CSPST, [512, 1, True,  1, 0.50]]   # 24: P4 head
+  - [13, 1, CSPST, [512, 1, False, 1, 0.2]]  # 25: P5 head
+
+  # Detect 4 scales (P2, P3, P4, P5')
+  - [[22, 23, 24, 25], 1, Detect, [nc, anchors]]

@@ -1,0 +1,39 @@
+# --- Optimization / scheduler ---
+lr0: 0.000035          # a touch higher to help convergence with reduced aug
+lrf: 0.12
+momentum: 0.843
+weight_decay: 0.00036
+warmup_epochs: 3.0
+warmup_momentum: 0.5
+warmup_bias_lr: 0.05
+
+# --- Detection loss ---
+box: 0.09             # ↑ a bit; tiny boxes benefit from stronger box loss
+cls: 0.18
+obj: 0.22             # ↑ to favor tiny positives in clutter
+cls_pw: 0.631
+obj_pw: 0.911
+iou_t: 0.25           # slight ↑ to avoid too-easy matches on tiny boxes
+anchor_t: 2.0         # ↓ helps anchors specialize on tiny sizes
+fl_gamma: 1.5         # focal loss to down-weight easy negatives for tiny objs
+
+# --- Augmentation (lighter & more consistent) ---
+hsv_h: 0.4
+hsv_s: 0.25           # ↓ reduce color drift under camouflage
+hsv_v: 0.4            # ↓ keep low-contrast cues
+degrees: 0.0          # rot hurts micro targets
+translate: 0.02       # tiny, avoid large motion w/ temporal
+scale: 0.25           # ↓ less zoom jitter; helps tiny
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.5
+mosaic: 0           # start higher, plan to drop to 0 after 15 epochs
+mixup: 0.05           # tiny bit only; large values blur already-blurry targets
+double_mixup: 0.0
+copy_paste: 0.0
+
+# --- Temporal / dataloader knobs ---
+num_frames: 5
+skip_rate: 0
+frame_wise: 0         # 0 = same augmentation across frames (faster, more stable)

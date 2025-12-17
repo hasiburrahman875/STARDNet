@@ -1,0 +1,66 @@
+# ================= DRFB (P2,P3) + DCLS (P4,P5) + 4×CSPST heads =================
+nc: 1
+depth_multiple: 1.0
+width_multiple: 1.0
+anchors: 4
+
+backbone:
+  [
+    # P1 2
+    [-1, 1, Conv,   [64, 6, 2, 2]],
+
+    # P2 4
+    [-1, 1, Conv,   [128, 3, 2]],
+    [-1, 1, DRFB,   [128, 1]],
+    [-1, 1, DRFB,   [128, 2]],
+
+    # P2 -> P3 with anti-alias downsample  outputs 256 ch
+    [-1, 1, AADown, [256]],
+
+    # P3 8
+    [-1, 1, DRFB,   [256, 1]],
+    [-1, 1, DRFB,   [256, 1]],
+
+    # P4 16
+    [-1, 1, Conv,   [256, 3, 2]],
+    [-1, 1, DCLS,   [512, 0.50]],
+
+    # P5 32
+    [-1, 1, Conv,   [512, 3, 2]],
+    [-1, 1, DCLS,   [1024, 0.25]],
+    [-1, 1, SPPF,   [1024, 5]],
+  ]
+
+head:
+  [
+    # Laterals
+    [3,  1, C3,     [128,  False]],   # from s(P2)
+    [6,  1, C3,     [256,  False]],   # from s(P3)
+    [8,  1, C3,     [512,  False]],   # from φ(P4)
+    [11, 1, C3,     [1024, False]],   # from SPPF(φ(P5))
+
+    # P5 -> P4 mix  M45
+    [15, 1, Conv,   [512, 1, 1]],
+    [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+    [[-1, 14], 1, Concat, [1]],
+    [-1, 1, C3,     [512, False]],
+
+    # M45 -> P3
+    [19, 1, Conv,   [256, 1, 1]],
+    [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+    [[-1, 13], 1, Concat, [1]],
+
+    # M45 -> P2
+    [21, 1, nn.Upsample, [None, 2, 'nearest']],
+    [23, 1, Conv,   [128, 1, 1]],
+    [[-1, 12], 1, Concat, [1]],
+
+    # CSPST heads
+    [25, 1, CSPST,  [128, 1]],                         # P2
+    [22, 1, CSPST,  [256, 1]],                         # P3
+    [19, 1, CSPST,  [512, 1, True, 1, 0.25]],                         # P4
+    [15, 1, CSPST,  [1024, 1, True, 1, 0.135]],         # P5
+
+    # Detect
+    [[26, 27, 28, 29], 1, Detect, [nc, anchors]],
+  ]

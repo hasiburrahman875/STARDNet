@@ -1,0 +1,18 @@
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: "/cluster/pixstor/madrias-lab/Hasibur/STARDNet/Datasets/mvaaod-s/images"  # dataset root dir
+train: "train"  # train images (relative to 'path')  6471 images
+val: "test"  # val images (relative to 'path')  548 images
+test: "test"  # test images (optional)  1610 images
+inference: "test"
+annotation_path: "/cluster/pixstor/madrias-lab/Hasibur/STARDNet/Datasets/mvaaod-s/labels"
+annotation_train: "train"
+annotation_val: "test"
+annotation_test: "test"
+video_root_path: "/cluster/pixstor/madrias-lab/Hasibur/STARDNet/Datasets/mvaaod-s/videos"
+video_root_path_train: "train"
+video_root_path_val: "test"
+video_root_path_test: "test"
+video_root_path_inference: "test"
+
+# Classes
+nc: 3  # number of cl

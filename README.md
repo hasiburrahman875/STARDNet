@@ -4,7 +4,13 @@ The paper is accepted in ACM TSAS.
 
 ## Implementation
 
-### Download the weights and datasets from the above link (coming soon). 
+### Download the weights and datasets from the following link. 
+
+Follow the dataset download instructions to obtain the necessary datasets and pre-trained weights.  
+
+**Dataset Link:** [Download Dataset](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/EtkiYMp_l7pKhGL_yuSdfPMBiLBS1wxl3w2xRRcO3Es7Fw?e=I7Gs0e)  
+
+**Weights Link:** [Download Weights](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/Eoh8hdcmINtFiSlTDEFLIbsB8FggMe2k85hHf3qnAXxuJg?e=GOGkcZ)  
 
 ## Validation Instructions
 

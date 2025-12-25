@@ -10,7 +10,7 @@ Follow the dataset download instructions to obtain the necessary datasets and pr
 
 **Dataset Link:** [Download Dataset](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/EtkiYMp_l7pKhGL_yuSdfPMBiLBS1wxl3w2xRRcO3Es7Fw?e=I7Gs0e)  
 
-**Weights Link:** [Download Weights](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/Eoh8hdcmINtFiSlTDEFLIbsB8FggMe2k85hHf3qnAXxuJg?e=GOGkcZ)  
+**Weights Link:** [Download Weights]()  
 
 ## Validation Instructions
 

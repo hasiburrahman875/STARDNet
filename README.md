@@ -52,7 +52,7 @@ Activate the Python environment as above and execute the following command in th
 ```bash
 python val.py --data data/dataset_name.yaml --weights path_to_the_weight --img provide_img_size --batch 1 --num-frame 5 --name experiment_name
 ```
-Ensure that the paths and parameters are correctly provided before running the command. ***Note:** For FL-Drone image size is 640 while working with spat-temp.
+Ensure that the paths and parameters are correctly provided before running the command. 
 
 ## Training Instructions
 

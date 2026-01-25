@@ -1,6 +1,6 @@
 # STARDNet
 Thank you for visiting us!
-The paper is accepted in ACM TSAS. 
+The paper has been accepted for ACM TSAS: https://doi.org/10.1145/3787467. 
 
 ## Implementation
 

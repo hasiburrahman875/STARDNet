@@ -30,8 +30,7 @@ The repository provides the model implementation, dataset configuration files, t
 ## Resources
 
 - **Paper:** [ACM Digital Library / DOI](https://doi.org/10.1145/3787467)
-- **Datasets:** [Download](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/EtkiYMp_l7pKhGL_yuSdfPMBiLBS1wxl3w2xRRcO3Es7Fw?e=I7Gs0e)
-- **Pretrained weights:** [Download](https://mailmissouri-my.sharepoint.com/:f:/g/personal/mrpk9_umsystem_edu/IgDsAlG-ulgFS7NoivRHxEMwAQGuXz6ChWAsQTALdfFFZCo?e=9RYThm)
+- **Datasets & Pretrained weights:** [Download](https://zenodo.org/records/24514488)
 
 ## Repository Structure
 
